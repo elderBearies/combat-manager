@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Our simple HTTP server</title>
+  <link rel="stylesheet" type="text/css" href="/default-styles.css">
+  <script>
+  	"use strict"; // because I got rid of client-side babel
+    const parseJSON = (xhr, content) => {
+    	if(xhr.response && xhr.getResponseHeader('Content-Type') === 'application/json'){
+      	const obj = JSON.parse(xhr.response);
+      	console.dir(obj);
+      	
+      	if(obj.message){
+      		content.innerHTML += `<p>${obj.message}</p>`;
+      	}
+      }
+    };
+
+    const handleResponse = (xhr) => {
+      const content = document.querySelector('#content');
+      
+      switch(xhr.status){
+      	case 200:
+      		content.innerHTML = '<b>Success!</b>';
+      		break;
+      	case 201:
+      		content.innerHTML = '<b>Created!</b>';
+      		break;
+      	case 204:
+      		content.innerHTML = '<b>Updated (No Content)!</b>';
+      		break;
+      	case 400:
+      		content.innerHTML = '<b>Bad Request!</b>';
+      		break;
+      	default:
+      		content.innerHTML = '<b>Error code not implemented by client</b>';
+      }
+      
+      parseJSON(xhr,content);
+    };
+
+    const sendPost = (e, nameForm) => {
+			e.preventDefault();
+			
+			const nameAction = nameForm.getAttribute("action");
+			const nameMethod = nameForm.getAttribute("method");
+			
+			const nameField = nameForm.querySelector("#nameField");
+			const typeField = nameForm.querySelector("#typeField");
+			const acField = nameForm.querySelector("#acField");
+			const hpField = nameForm.querySelector("#hpField");
+			
+			const xhr = new XMLHttpRequest();
+			xhr.open(nameMethod,nameAction); // NEW - in the past we've been using "GET"
+			
+			xhr.setRequestHeader('Accept','application/json');
+			xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
+			// what is "x-www-form-urlencoded"
+			// for GET we already saw it - ex. "/unauthorized?loggedIn=yes&valid=true"
+			// everything after the question mark is urlencoded
+			// multiple key=value pairs are separated by the &
+			// HTML forms also encode their values this way
+			// in the form below the values are encoded as "name=someValue&age=someValue"
+			// https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/POST
+			
+			xhr.onload = () => handleResponse(xhr);
+			
+			const formData = `name=${nameField.value}&type=${typeField.value}&armor_class=${acField.value}&hit_points=${hpField.value}`;
+			xhr.send(formData); // NEW - in the past we haven't been sending anything here because ...
+			// ... our data has always been encoded in the URL
+			/// ... instead of being in a separate file as it is now
+			
+			/*
+				Things to try:
+				1) Add new users, we should see "201 Created" status code
+				- look in the Request tab of the debugger to see the form data
+				- Recall that every time the server reboots we lose our data because `users` in jsonResponses.js is re-initialized 
+				2) Update a new user (i.e. send the same name) again - we'll see "204 No Content"
+				3) Leave off name or age and get back a "400 Bad Request"
+				4) In the debugger, you can see that the Network request is being made via XHR
+				5) Disable the XHR and you can see the Network request is being made via the form (and we're getting taken to a new page)
+				6) Re-enable the XHR and get rid of the `action` and `method` of the form and make the XHR work
+			*/
+			
+			return false; // prevents event bubbling
+    };
+
+    const init = () => {
+      const nameForm = document.querySelector('#nameForm');
+      
+      const addUser = (e) => sendPost(e, nameForm);
+      
+     	nameForm.addEventListener('submit', addUser);
+    };
+
+    window.onload = init;
+
+  </script>
+</head>
+<body>
+  <section id="top">
+    <h3>Add a monster!</h3>
+    <form id="nameForm" action="/addMonster" method="post">
+      <label for="name">Name: </label>
+      <input id="nameField" type="text" name="name" />
+      <label for="type">Type: </label>
+      <input id="typeField" type="text" name="type"/>
+	  <label for="armor_class">AC: </label>
+	  <input id="acField" type="text" name="armor_class"/>
+	  <label for="hit_points">HP: </label>
+	  <input id="hpField" type="text" name="hit_points"/>
+      <input type="submit" value="Add Monster" />
+    </form>
+    <p>Go to <a href="/customMonsters">/customMonsters</a> to see all of the custom monsters added! I'm still working on making the api validate data types and such, so everything's strings rn.</p>
+  </section>
+  <section id="content">
+  </section>
+</body>
+</html>

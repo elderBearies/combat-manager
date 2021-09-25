@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title>Joke Client</title>
+    <title>5e Combat Manager</title>
     <link href="default-styles.css" type="text/css" rel="stylesheet" />
     <style>
       header{
@@ -26,25 +26,21 @@
         const obj = JSON.parse(e.target.response); //parse string back to object
         //update jokecontainer with contents of joke
         
-        if (obj.length > 1) {
-          jokesContainer.innerHTML = '';
-          for (let i = 0; i < obj.length; i += 1) {
-            jokesContainer.innerHTML += '<p>' + obj[i].q + '</p><p>' + obj[i].a +'</p><br />';
-          }
-        } else {
-          jokeContainer.innerHTML += '<p>' + obj.q + '</p><p>' + obj.a +'</p>';
-        }
-      }
+		monsterBox.innerHTML = '';
+        for (let i = 0; i < obj.length; i += 1) {
+          monsterBox.innerHTML += '<p>Name: ' + obj[i].name + '</p><p>Type: ' + obj[i].type +'</p><p>AC: ' + obj[i].armor_class + '</p><p>HP: ' + obj[i].hit_points + '</p>';
+		}
+	  }
 	
-      const downloadJoke = (e) => {
+      const downloadMonster = (e) => {
         // remember that an `Event` object gets passed along every time that an event handler or listener calls a function
         // the `target` property of that event points at the element that sent the event, in this case a button
         console.log(`An element of id=${e.target.id} was clicked!`);
 		
-        const jokeURL = e.target.id === 'btnJoke' ? '/random-joke' : '/random-jokes?limit=5';
+        const monURL = '/customMonsters';
         const xhr = new XMLHttpRequest();
         xhr.onload = handleResponse;
-        xhr.open('GET', jokeURL);
+        xhr.open('GET', monURL);
         // with xhr, after we open a connection but before we send(), we can set 1 or more http request headers
         // not strictly necessary here - /random-joke sends json by default
         xhr.setRequestHeader('Accept', 'application/javascript');
@@ -56,11 +52,9 @@
         // document.querySelector("#btnJoke").onclick = downloadJoke; // same as below, less typing, use which ever version you prefer
       
         // An Event *Listener*
-        document.querySelector("#btnJoke").addEventListener("click", downloadJoke);
+        document.querySelector("#btnMonster").addEventListener("click", downloadMonster);
       
         // **Actually, event handlers and listeners are NOT exactly the same in all use cases - what ARE the differences?**
-        
-        document.querySelector('#btnJokes').addEventListener("click", downloadJoke);
       }
       
       window.onload = init;
@@ -69,22 +63,25 @@
   </head>
   <body>
     <header>
-      <h1>Are you ready to LAUGH?</h1>
+      <h1>Are you ready to FIGHT?</h1>
     </header>
     
     <section>
-      <h2>Just have time for one joke?</h2>
-      <p><button id="btnJoke">Show me a Joke!</button></p>
-      <div id="jokeContainer">
+      <h2>Wanna fight a monster?</h2>
+      <p><button id="btnMonster">Roll for initiative!</button></p>
+      <div id="monsterBox">
         
       </div>
     </section>
     
     <section>
-      <h2>How about 5 jokes?</h2>
-      <p><button id="btnJokes">Show me 5 Jokes!</button></p>
-	  <div id="jokesContainer">
+      <h2>Built in monsters not enough?</h2>
+      <p><a href='/addMonster'><button>Add your own!</button></a></p>
     </section>
+	
+	<section>
+	  <p>For the endpoints and such, head over <a href='/links'>here</a>!</p>
+	</section>
     
   </body>
 </html>

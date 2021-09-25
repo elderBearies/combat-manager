@@ -4,6 +4,9 @@ const http = require('http');
 // pull in utility functions
 const utils = require('./utils');
 
+// pull in query module
+const query = require('querystring');
+
 // pull in external modules
 const htmlHandler = require('./htmlResponses');
 const jsonHandler = require('./responses');
@@ -14,11 +17,14 @@ const port = process.env.PORT || process.env.NODE_PORT || 3000;
 // make a call table
 const urlStruct = {
   '/': htmlHandler.getIndexResponse,
-  '/random-joke': jsonHandler.getRandomJokeResponse,
-  '/random-jokes': jsonHandler.getRandomJokeResponse,
+  '/customMonsters': jsonHandler.getCustomMonsters,
+  '/addMonster': htmlHandler.getMonsterPage,
+  '/links': htmlHandler.getAllLinks,
   '/default-styles.css': htmlHandler.getCSSResponse,
   notFound: htmlHandler.get404Response,
 };
+
+
 
 // this is the function that will be called every time a client request comes in
 // this time we will look at the `pathname`, and send back the appropriate page
@@ -31,11 +37,39 @@ const onRequest = (request, response) => {
   acceptedTypes = acceptedTypes || [];
 
   const httpMethod = request.method;
-
-  if (urlStruct[urlData.pathname]) {
-    urlStruct[urlData.pathname](request, response, urlData.params, acceptedTypes, httpMethod);
-  } else {
+  if(request.method === "POST"){
+     handlePost(request, response, urlData);
+  }else{
+    if (urlStruct[urlData.pathname]) {
+      urlStruct[urlData.pathname](request, response, urlData.params, acceptedTypes, httpMethod);
+    } else {
     urlStruct.notFound(request, response, httpMethod);
+    }
+  }
+};
+
+// pulled from body.parse example
+const handlePost = (request, response, parsedUrl) => {
+  if (parsedUrl.pathname === '/addMonster') {
+    const body = [];
+    
+    // https://nodejs.org/api/http.html
+    request.on('error', (err) => {
+      console.dir(error);
+      response.statusCode = 400;
+      response.end();
+    });
+    
+    request.on('data', (chunk) => {
+      body.push(chunk);
+    });
+    
+    request.on('end', () => {
+      const bodyString = Buffer.concat(body).toString();
+      const bodyParams = query.parse(bodyString);
+      
+      jsonHandler.addMonster(request, response, bodyParams);
+    });
   }
 };
 
