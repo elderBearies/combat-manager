@@ -22,11 +22,11 @@ const getIndexResponse = (request, response, httpMethod) => {
 
 const getMonsterPage = (request, response, httpMethod) => {
   utils.sendResponse(response, 200, 'text/html', monsterPage, httpMethod);
-}
+};
 
 const getAllLinks = (request, response, httpMethod) => {
   utils.sendResponse(response, 200, 'text/html', allLinks, httpMethod);
-}
+};
 
 module.exports.get404Response = get404Response;
 module.exports.getCSSResponse = getCSSResponse;
