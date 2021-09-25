@@ -1,0 +1,22 @@
+{
+  "name": "first-web-service",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Tests complete!\"",
+    "pretest": "eslint ./src --fix",
+    "start": "node ./src/server.js",
+    "nodemon": "nodemon ./src/server.js -e js,html,css"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb": "^18.2.1",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.24.2",
+    "nodemon": "^2.0.12"
+  }
+}
