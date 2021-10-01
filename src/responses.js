@@ -1,7 +1,7 @@
 const utils = require('./utils');
 
 const monsters = [{
-  name: 'test monster', type: 'dragon', armor_class: 21, hit_points: 333,
+  index: 'test-monster', name: 'test monster', type: 'dragon', armor_class: 21, hit_points: 333,
 }];
 
 // borrowed from body.parse example - will refactor later
@@ -62,20 +62,34 @@ const addMonster = (request, response, body) => {
     return respondJSON(request, response, 400, responseJSON); // 400=bad request
   }
 
-  const newMon = {};
-
   // we DID get a name and age
-  const responseCode = 201; // "created"
+  let responseCode = 201; // "created"
 
-  /** if (monsters[body.name]) { // user exists
-    responseCode = 204; // updating, so "no content"
-  } */ // gonna figure out making validation work shortly
+  const ac = Number.parseInt(body.armor_class, 10);
+  const hp = Number.parseInt(body.hit_points, 10);
+  const nameString = body.name;
+  const monIndex = nameString.replace(/ /g, '-').toLowerCase();
 
-  // update or initialize values, as the case may be
-  newMon.name = body.name;
-  newMon.type = body.type;
-  newMon.armor_class = body.armor_class;
-  newMon.hit_points = body.hit_points;
+  if (Number.isNaN(ac) || Number.isNaN(hp)) {
+    responseJSON.id = 'missingParams';
+    return respondJSON(request, response, 400, responseJSON); // 400=bad request
+  }
+
+  for (let i = 0; i < monsters.length; i += 1) {
+    if (monsters[i].index === monIndex) {
+      responseCode = 204; // updating
+      monsters.splice(i);
+      break;
+    }
+  }
+
+  const newMon = {
+    index: monIndex,
+    name: nameString,
+    type: body.type,
+    armor_class: ac,
+    hit_points: hp,
+  };
 
   monsters.push(newMon);
 

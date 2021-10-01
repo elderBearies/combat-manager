@@ -55,42 +55,24 @@
 			
 			xhr.setRequestHeader('Accept','application/json');
 			xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
-			// what is "x-www-form-urlencoded"
-			// for GET we already saw it - ex. "/unauthorized?loggedIn=yes&valid=true"
-			// everything after the question mark is urlencoded
-			// multiple key=value pairs are separated by the &
-			// HTML forms also encode their values this way
-			// in the form below the values are encoded as "name=someValue&age=someValue"
-			// https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/POST
+
 			
 			xhr.onload = () => handleResponse(xhr);
 			
 			const formData = `name=${nameField.value}&type=${typeField.value}&armor_class=${acField.value}&hit_points=${hpField.value}`;
-			xhr.send(formData); // NEW - in the past we haven't been sending anything here because ...
-			// ... our data has always been encoded in the URL
-			/// ... instead of being in a separate file as it is now
+			xhr.send(formData);
 			
-			/*
-				Things to try:
-				1) Add new users, we should see "201 Created" status code
-				- look in the Request tab of the debugger to see the form data
-				- Recall that every time the server reboots we lose our data because `users` in jsonResponses.js is re-initialized 
-				2) Update a new user (i.e. send the same name) again - we'll see "204 No Content"
-				3) Leave off name or age and get back a "400 Bad Request"
-				4) In the debugger, you can see that the Network request is being made via XHR
-				5) Disable the XHR and you can see the Network request is being made via the form (and we're getting taken to a new page)
-				6) Re-enable the XHR and get rid of the `action` and `method` of the form and make the XHR work
-			*/
 			
-			return false; // prevents event bubbling
+			
+			return false;
     };
 
     const init = () => {
       const nameForm = document.querySelector('#nameForm');
       
-      const addUser = (e) => sendPost(e, nameForm);
+      const addMonster = (e) => sendPost(e, nameForm);
       
-     	nameForm.addEventListener('submit', addUser);
+     	nameForm.addEventListener('submit', addMonster);
     };
 
     window.onload = init;
@@ -111,7 +93,7 @@
 	  <input id="hpField" type="text" name="hit_points"/>
       <input type="submit" value="Add Monster" />
     </form>
-    <p>Go to <a href="/customMonsters">/customMonsters</a> to see all of the custom monsters added! I'm still working on making the api validate data types and such, so everything's strings rn.</p>
+    <p>Go to <a href="/customMonsters?limit=999">/customMonsters</a> to see all of the custom monsters added! I'm still working on making the api validate data types and such, so everything's strings rn.</p>
   </section>
   <section id="content">
   </section>
