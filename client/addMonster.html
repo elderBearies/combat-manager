@@ -8,7 +8,7 @@
     const parseJSON = (xhr, content) => {
     	if(xhr.response && xhr.getResponseHeader('Content-Type') === 'application/json'){
       	const obj = JSON.parse(xhr.response);
-      	console.dir(obj);
+      	//console.dir(obj);
       	
       	if(obj.message){
       		content.innerHTML += `<p>${obj.message}</p>`;
@@ -32,6 +32,9 @@
       	case 400:
       		content.innerHTML = '<b>Bad Request!</b>';
       		break;
+		case 409:
+		    content.innerHTML = '<b>Resource exists in external API!</b>
+			break;
       	default:
       		content.innerHTML = '<b>Error code not implemented by client</b>';
       }
@@ -93,7 +96,7 @@
 	  <input id="hpField" type="text" name="hit_points"/>
       <input type="submit" value="Add Monster" />
     </form>
-    <p>Go to <a href="/customMonsters?limit=999">/customMonsters</a> to see all of the custom monsters added! I'm still working on making the api validate data types and such, so everything's strings rn.</p>
+    <p>Go to <a href="/customMonsters?limit=999">/customMonsters</a> to see all of the custom monsters added!</p>
   </section>
   <section id="content">
   </section>

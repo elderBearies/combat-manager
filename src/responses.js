@@ -1,8 +1,16 @@
-const utils = require('./utils');
+import fetch from 'node-fetch'; // it wouldn't let me require() it so everything's modules now
+import * as utils from './utils.js';
 
 const monsters = [{
   index: 'test-monster', name: 'test monster', type: 'dragon', armor_class: 21, hit_points: 333,
 }];
+
+const getMonsters = async (str = '') => {
+  const apiResp = await fetch(`https://www.dnd5eapi.co/api/monsters/${str}`);
+  const monJSON = await apiResp.json();
+  if (monJSON.results) return monJSON.results;
+  return monJSON;
+};
 
 // borrowed from body.parse example - will refactor later
 const respondJSON = (request, response, status, object) => {
@@ -16,9 +24,48 @@ const respondJSONMeta = (request, response, status) => {
   response.writeHead(status, { 'Content-Type': 'application/json' });
   response.end();
 };
-// i opted to make the behavior of the endpoints identical
-// params.limit defaults to 1 anyway if there's nothing passed in through the url
+
+const searchMons = async (response, str, httpMethod) => {
+  const externalMons = await getMonsters();
+  const failedToFind = {
+    code: 404,
+    msg: "Couldn't find that monster!",
+  };
+  let monStr;
+  let foundMon = '';
+  for (let i = 0; i < externalMons.length; i += 1) {
+    if (externalMons[i].index.includes(str)) {
+      foundMon = externalMons[i].index;
+      break;
+    }
+  }
+  if (foundMon.length > 0) {
+    monStr = JSON.stringify(await getMonsters(foundMon));
+    utils.sendResponse(response, 200, 'application/JSON', monStr, httpMethod);
+    return;
+  }
+
+  for (let i = 0; i < monsters.length; i += 1) {
+    if (monsters[i].index.includes(str)) {
+      monStr = JSON.stringify(monsters[i]);
+      utils.sendResponse(response, 200, 'application/JSON', monStr, httpMethod);
+      return;
+    }
+  }
+  utils.sendResponse(response, 404, 'application/JSON', JSON.stringify(failedToFind), httpMethod);
+};
+
+// params.limit defaults to 1 if there's nothing passed in through the url
 const getCustomMonsters = (request, response, params, acceptedTypes, httpMethod) => {
+  const { search } = params;
+  console.log(search);
+
+  if (search.length > 0) {
+    console.log('searching...');
+    searchMons(response, search, httpMethod);
+    return;
+  }
+
   // pull limit from params
   let { limit } = params;
 
@@ -52,18 +99,20 @@ const getCustomMonsters = (request, response, params, acceptedTypes, httpMethod)
 };
 
 // pulled from body.parse example, modified to suit my needs
-const addMonster = (request, response, body) => {
+const addMonster = async (request, response, body) => {
   const responseJSON = {
-    message: 'please fill out all parameters!',
+    message: 'Please fill out all parameters properly!',
   };
+
+  let responseCode = 201;
+
+  const externalMons = await getMonsters();
 
   if (!body.name || !body.type || !body.armor_class || !body.hit_points) {
     responseJSON.id = 'missingParams';
-    return respondJSON(request, response, 400, responseJSON); // 400=bad request
+    responseCode = 400; // bad request
+    return respondJSON(request, response, responseCode, responseJSON);
   }
-
-  // we DID get a name and age
-  let responseCode = 201; // "created"
 
   const ac = Number.parseInt(body.armor_class, 10);
   const hp = Number.parseInt(body.hit_points, 10);
@@ -72,7 +121,17 @@ const addMonster = (request, response, body) => {
 
   if (Number.isNaN(ac) || Number.isNaN(hp)) {
     responseJSON.id = 'missingParams';
-    return respondJSON(request, response, 400, responseJSON); // 400=bad request
+    responseCode = 400; // bad request
+    return respondJSON(request, response, responseCode, responseJSON);
+  }
+
+  for (let i = 0; i < externalMons.length; i += 1) {
+    if (externalMons[i].index === monIndex) {
+      responseCode = 409; // conflict
+      responseJSON.id = 'existsExternally';
+      responseJSON.message = 'Resource exists in external API!';
+      return respondJSON(request, response, responseCode, responseJSON);
+    }
   }
 
   for (let i = 0; i < monsters.length; i += 1) {
@@ -101,5 +160,7 @@ const addMonster = (request, response, body) => {
   return respondJSONMeta(request, response, responseCode); // this is for 204, a "no content" header
 };
 
-module.exports.getCustomMonsters = getCustomMonsters;
-module.exports.addMonster = addMonster;
+export {
+  getCustomMonsters,
+  addMonster,
+};

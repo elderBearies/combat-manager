@@ -1,11 +1,11 @@
 // pull in URL module
-const url = require('url');
+import url from 'url';
 
 // pull in query module
-const query = require('querystring');
+import query from 'querystring';
 
 // pull in http module
-const http = require('http');
+import http from 'http';
 
 // given an array, grabs a random element.
 const getRandomArrItem = (arr) => {
@@ -49,7 +49,9 @@ const sendResponse = (response, code, type, data, httpMethod) => {
   response.end();
 };
 
-module.exports.getRandomArrItem = getRandomArrItem;
-module.exports.getRandomArrItems = getRandomArrItems;
-module.exports.parseURL = parseURL;
-module.exports.sendResponse = sendResponse;
+export {
+  getRandomArrItem,
+  getRandomArrItems,
+  parseURL,
+  sendResponse,
+};

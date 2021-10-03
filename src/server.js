@@ -1,15 +1,14 @@
 // pull in the HTTP server module
-const http = require('http');
+import http from 'http';
 
 // pull in utility functions
-const query = require('querystring');
-const utils = require('./utils');
+import query from 'querystring';
+import * as utils from './utils.js';
 
 // pull in query module
-
 // pull in external modules
-const htmlHandler = require('./htmlResponses');
-const jsonHandler = require('./responses');
+import * as htmlHandler from './htmlResponses.js';
+import * as jsonHandler from './responses.js';
 
 // locally this will be 3000, on Heroku it will be assigned
 const port = process.env.PORT || process.env.NODE_PORT || 3000;

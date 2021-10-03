@@ -1,7 +1,8 @@
 {
-  "name": "first-web-service",
+  "name": "5e-combat-manager",
   "version": "1.0.0",
-  "description": "",
+  "type": "module",
+  "description": "an initiative tracker fo dungeons and dragons 5th edition",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Tests complete!\"",
@@ -18,5 +19,8 @@
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-plugin-import": "^2.24.2",
     "nodemon": "^2.0.12"
+  },
+  "dependencies": {
+    "node-fetch": "^3.0.0"
   }
 }
