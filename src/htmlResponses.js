@@ -12,11 +12,11 @@ const __filename = new URL('', import.meta.url).pathname;
 const dirname = new URL('.', import.meta.url).pathname;
 const __dirname = dirname.slice(1);
 
-const errorPage = fs.readFileSync(`${__dirname}../client/error.html`);
-const defaultStyles = fs.readFileSync(`${__dirname}../client/default-styles.css`);
-const indexPage = fs.readFileSync(`${__dirname}../client/client.html`);
-const monsterPage = fs.readFileSync(`${__dirname}../client/addMonster.html`);
-const allLinks = fs.readFileSync(`${__dirname}../client/allLinks.html`);
+const errorPage = fs.readFileSync(`${__dirname}/../client/error.html`);
+const defaultStyles = fs.readFileSync(`${__dirname}/../client/default-styles.css`);
+const indexPage = fs.readFileSync(`${__dirname}/../client/client.html`);
+const monsterPage = fs.readFileSync(`${__dirname}/../client/addMonster.html`);
+const allLinks = fs.readFileSync(`${__dirname}/../client/allLinks.html`);
 
 const get404Response = (request, response, httpMethod) => {
   utils.sendResponse(response, 404, 'text/html', errorPage, httpMethod);
