@@ -61,7 +61,7 @@ const getCustomMonsters = (request, response, params, acceptedTypes, httpMethod)
   const { search } = params;
   console.log(search);
 
-  if (search.length > 0) {
+  if (search) {
     console.log('searching...');
     searchMons(response, search, httpMethod);
     return;
