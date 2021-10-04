@@ -1,14 +1,12 @@
 import fs from 'fs';
 
-import { URL } from 'url'; // in Browser, the URL in native accessible on window
-import * as utils from './utils.js';
-
 // three lines below are courtesy of GOTO 0 on stackoverflow
 // https://stackoverflow.com/questions/46745014/alternative-for-dirname-in-node-when-using-the-experimental-modules-flag
 // modified a bit to make it work
 
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
+import * as utils from './utils.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
