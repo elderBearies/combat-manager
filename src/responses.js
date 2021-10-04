@@ -31,6 +31,7 @@ const searchMons = async (response, str, httpMethod) => {
     code: 404,
     msg: "Couldn't find that monster!",
   };
+  if (str.length <= 0) utils.sendResponse(response, 404, 'application/JSON', JSON.stringify(failedToFind), httpMethod);
   let monStr;
   let foundMon = '';
   for (let i = 0; i < externalMons.length; i += 1) {
@@ -129,7 +130,7 @@ const addMonster = async (request, response, body) => {
     if (externalMons[i].index === monIndex) {
       responseCode = 409; // conflict
       responseJSON.id = 'existsExternally';
-      responseJSON.message = 'Resource exists in external API!';
+      responseJSON.message = 'Try a different name!';
       return respondJSON(request, response, responseCode, responseJSON);
     }
   }
