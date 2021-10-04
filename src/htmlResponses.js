@@ -3,14 +3,14 @@ import fs from 'fs';
 import { URL } from 'url'; // in Browser, the URL in native accessible on window
 import * as utils from './utils.js';
 
-// three lines below are courtesy of Rudolf Grohling on stackoverflow
+// three lines below are courtesy of GOTO 0 on stackoverflow
 // https://stackoverflow.com/questions/46745014/alternative-for-dirname-in-node-when-using-the-experimental-modules-flag
 // modified a bit to make it work
 
-const __filename = new URL('', import.meta.url).pathname;
-// Will contain trailing slash
-const dirname = new URL('.', import.meta.url).pathname;
-const __dirname = dirname.slice(1);
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const errorPage = fs.readFileSync(`${__dirname}/../client/error.html`);
 const defaultStyles = fs.readFileSync(`${__dirname}/../client/default-styles.css`);
