@@ -6,6 +6,22 @@
 <link href="default-styles.css" type="text/css" rel="stylesheet" />
 <script src=""></script>
 <body>
-<h1>This page has nothing so far. It will have all of the links/endpoints for the site when i'm done.</h1>
+<h1>Links</h1>
+<section>
+  <h2>Endpoints</h2>
+  <h3>GET:</h3> 
+  <p> <a href='/customMonsters'>/customMonsters</a>: takes a limit parameter and returns a random selection of all of the monsters users have added. Defaults to 1 if no limit is given.</p>
+  <p> <a href='/searchMonsters'>/searchMonsters</a>: takes a term parameter and searches both the external api and the local api for the first monster that fits it. </p>
+  <h3>POST:</h3>
+  <p> <a href='/addMonster'>/addMonster</a>: Allows users to add monsters to the local api via a simple form.</p>
+</section>
+<section>
+  <h2>The App</h2>
+  <p> You probably got here from the main application, but <a href='/'>here</a>'s a link back anyway!</p>
+</section>
+<section>
+  <h2>Admins</h2>
+  <p> Go here for the admin page, where you can edit the contents of the local api! </p>
+</section>
 </body>
 </html> 

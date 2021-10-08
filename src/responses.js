@@ -25,17 +25,24 @@ const respondJSONMeta = (request, response, status) => {
   response.end();
 };
 
-const searchMons = async (response, str, httpMethod) => {
+const searchMons = async (request, response, params, acceptedTypes, httpMethod) => {
   const externalMons = await getMonsters();
+  const { term } = params;
   const failedToFind = {
     code: 404,
     msg: "Couldn't find that monster!",
   };
-  if (str.length <= 0) utils.sendResponse(response, 404, 'application/JSON', JSON.stringify(failedToFind), httpMethod);
+  if (!term || term.length <= 0) {
+    utils.sendResponse(response, 404, 'application/JSON', JSON.stringify(failedToFind), httpMethod);
+    return;
+  }
+  /** if (term.length <= 0) {
+    utils.sendResponse(response, 404, 'application/JSON', JSON.stringify(failedToFind), httpMethod);
+  } */
   let monStr;
   let foundMon = '';
   for (let i = 0; i < externalMons.length; i += 1) {
-    if (externalMons[i].index.includes(str)) {
+    if (externalMons[i].index.includes(term)) {
       foundMon = externalMons[i].index;
       break;
     }
@@ -47,7 +54,7 @@ const searchMons = async (response, str, httpMethod) => {
   }
 
   for (let i = 0; i < monsters.length; i += 1) {
-    if (monsters[i].index.includes(str)) {
+    if (monsters[i].index.includes(term)) {
       monStr = JSON.stringify(monsters[i]);
       utils.sendResponse(response, 200, 'application/JSON', monStr, httpMethod);
       return;
@@ -58,15 +65,6 @@ const searchMons = async (response, str, httpMethod) => {
 
 // params.limit defaults to 1 if there's nothing passed in through the url
 const getCustomMonsters = (request, response, params, acceptedTypes, httpMethod) => {
-  const { search } = params;
-  console.log(search);
-
-  if (search) {
-    console.log('searching...');
-    searchMons(response, search, httpMethod);
-    return;
-  }
-
   // pull limit from params
   let { limit } = params;
 
@@ -164,4 +162,5 @@ const addMonster = async (request, response, body) => {
 export {
   getCustomMonsters,
   addMonster,
+  searchMons,
 };

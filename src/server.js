@@ -17,6 +17,7 @@ const port = process.env.PORT || process.env.NODE_PORT || 3000;
 const urlStruct = {
   '/': htmlHandler.getIndexResponse,
   '/customMonsters': jsonHandler.getCustomMonsters,
+  '/searchMonsters': jsonHandler.searchMons,
   '/addMonster': htmlHandler.getMonsterPage,
   '/links': htmlHandler.getAllLinks,
   '/default-styles.css': htmlHandler.getCSSResponse,

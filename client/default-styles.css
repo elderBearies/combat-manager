@@ -1,3 +1,7 @@
 * {
   font-family: sans-serif;	
 }
+      
+section {
+  border-bottom:1px dashed gray;
+}
