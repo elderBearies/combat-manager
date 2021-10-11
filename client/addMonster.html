@@ -5,6 +5,7 @@
   <link rel="stylesheet" type="text/css" href="/default-styles.css">
   <script>
   	"use strict"; // because I got rid of client-side babel
+	// parses json response
     const parseJSON = (xhr, content) => {
     	if(xhr.response && xhr.getResponseHeader('Content-Type') === 'application/json'){
       	const obj = JSON.parse(xhr.response);
@@ -19,6 +20,7 @@
     const handleResponse = (xhr) => {
       const content = document.querySelector('#content');
       
+      // switch statement for status code handling
       switch(xhr.status){
       	case 200:
       		content.innerHTML = '<b>Success!</b>';
@@ -42,6 +44,7 @@
       parseJSON(xhr,content);
     };
 
+    // hijacks the html form and handles posting data to the server side
     const sendPost = (e, nameForm) => {
 			e.preventDefault();
 			
@@ -70,6 +73,7 @@
 			return false;
     };
 
+    //initialize everything
     const init = () => {
       const nameForm = document.querySelector('#nameForm');
       

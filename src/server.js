@@ -28,6 +28,7 @@ const urlStruct = {
 };
 
 // pulled from body.parse example
+// passes POST data received over to addMonster in the json response handler
 const handlePost = (request, response, parsedUrl) => {
   if (parsedUrl.pathname === '/addMonster') {
     const body = [];
@@ -52,9 +53,7 @@ const handlePost = (request, response, parsedUrl) => {
   }
 };
 
-// this is the function that will be called every time a client request comes in
-// this time we will look at the `pathname`, and send back the appropriate page
-// note that in this course we'll be using arrow functions 100% of the time in our server-side code
+// this is the function that is called every time a client request comes in
 const onRequest = (request, response) => {
   // grab params from url
   const urlData = utils.parseURL(request.url);

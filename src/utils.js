@@ -1,7 +1,6 @@
 // pull in modules
 import url, { fileURLToPath } from 'url';
 import query from 'querystring';
-import http from 'http';
 import fs from 'fs';
 import path, { dirname } from 'path';
 
@@ -40,6 +39,7 @@ const parseURL = (urlStr) => {
 // refactored to arrow function by ACJ
 const getBinarySize = (string) => Buffer.byteLength(string, 'utf8');
 
+// I got tired of writing this stuff out, so I made it a function.
 const sendResponse = (response, code, type, data, httpMethod) => {
   const headers = {
     'Content-Type': type,
@@ -50,7 +50,7 @@ const sendResponse = (response, code, type, data, httpMethod) => {
   response.end();
 };
 
-// borrowed from streaming media assignment
+// borrowed from streaming media assignment so i can stream the spinner gif
 const loadFile = (request, response, filePath, tag) => {
   const file = path.resolve(__dirname, filePath);
 
@@ -105,13 +105,14 @@ const loadFile = (request, response, filePath, tag) => {
   });
 };
 
-// given accepted types and a json object, either parses to xml or stringifies json.
+// given accepted types and a json object, either parses json to xml or stringifies it.
 const handleType = (acceptedTypes, json) => {
   let type;
   let str = '';
 
   if (acceptedTypes.includes('text/xml')) {
     type = 'text/xml';
+    // if the json variable isn't an array, assume it's just one monster and parse accordingly
     if (!json.length) {
       str += `
         <monster>
@@ -137,7 +138,7 @@ const handleType = (acceptedTypes, json) => {
     type = 'application/JSON';
     str += JSON.stringify(json);
   }
-  return [type, str];
+  return { type, str };
 };
 
 export {

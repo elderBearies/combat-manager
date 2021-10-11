@@ -1,6 +1,6 @@
 import fs from 'fs';
 
-// three lines below are courtesy of GOTO 0 on stackoverflow
+// __dirname fix for modules courtesy of GOTO 0 on stackoverflow
 // https://stackoverflow.com/questions/46745014/alternative-for-dirname-in-node-when-using-the-experimental-modules-flag
 // modified a bit to make it work
 
@@ -10,6 +10,7 @@ import * as utils from './utils.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
+// load all of the html pages
 const errorPage = fs.readFileSync(`${__dirname}/../client/error.html`);
 const defaultStyles = fs.readFileSync(`${__dirname}/../client/default-styles.css`);
 const indexPage = fs.readFileSync(`${__dirname}/../client/client.html`);

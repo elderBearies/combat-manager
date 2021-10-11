@@ -3,8 +3,10 @@
     <title>5e Combat Manager</title>
     <link href="default-styles.css" type="text/css" rel="stylesheet" />
     <script>
+	  // array to keep track of initiative
 	  let initiative = [];
 	  
+	  // displays all of the monsters in initiative inside of the monsterBox
 	  const displayInitiative = () => {
 	    monsterBox.innerHTML = '';
 	    for (let monster of initiative) {
@@ -12,9 +14,9 @@
 		}
 	  }
 	
+	  // handler for server responses - adds monsters to initiative when it receives them
       const handleResponse = (e) => {
         const obj = JSON.parse(e.target.response); //parse string back to object
-        //update jokecontainer with contents of joke
 		const { code } = obj;
         if (code === 404) {
 		  statusBox.innerHTML = '<p>' + obj.msg + '</p>';
@@ -26,6 +28,7 @@
 		displayInitiative();
 	  }
 	
+	  // queries the server for a specific monster as defined by user input
       const downloadMonster = (e) => {
         const monURL = '/searchMonsters?term=';
         const xhr = new XMLHttpRequest();
@@ -36,8 +39,11 @@
         xhr.send();
       }
       
+	  // hook up buttons and such
       const init = () => {
         document.querySelector("#btnMonster").addEventListener("click", downloadMonster);
+		
+		// initiative update button maintains current hp and cycles the positions of array elements around
 		document.querySelector('#initUp').addEventListener('click', () => {
 		  let chps = document.querySelectorAll('.chp');
 		  for (let i = 0; i < chps.length; i++) {
@@ -46,6 +52,8 @@
 		  initiative.push(initiative.shift());
 		  displayInitiative();
 		});
+		
+		// player button adds a local player object to initiative based on user input
 		document.querySelector('#btnPlayer').addEventListener('click', () => {
 		  try {
 		    if (playerAC.value.length <= 0 || playerHP.value.length <= 0) throw new Error('too short!');

@@ -7,6 +7,7 @@
 <script>
   let allMons;
   
+  // when the viewAll endpoint is done loading, parses it out and updates status box
   const handleResponse = (e) => {
     const obj = JSON.parse(e.target.response); //parse string back to object
     const { code } = obj;
@@ -18,6 +19,8 @@
     statusBox.innerHTML = '<p>Loaded successfully!</p>';
 	displayMonsters();
   }
+  
+  // calls the viewAll endpoint and updates the status box to the loading spinner
   const downloadMonsters = (e) => {
     const monURL = '/viewAll';
     const xhr = new XMLHttpRequest();
@@ -27,6 +30,8 @@
     xhr.send();
 	statusBox.innerHTML = '<p><img src="/loading.gif"></p><p>Loading... This may take a few minutes!</p>';
   }
+  
+  // displays all of the monsters found via the viewAll endpoint
   const displayMonsters = () => {
     infoHere.innerHTML = '';
     for (let monster of allMons) {
