@@ -21,6 +21,9 @@ const urlStruct = {
   '/addMonster': htmlHandler.getMonsterPage,
   '/links': htmlHandler.getAllLinks,
   '/default-styles.css': htmlHandler.getCSSResponse,
+  '/admin': htmlHandler.getAdminPage,
+  '/viewAll': jsonHandler.allMonsters,
+  '/loading.gif': htmlHandler.getLoader,
   notFound: htmlHandler.get404Response,
 };
 

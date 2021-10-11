@@ -4,8 +4,47 @@
 <title>Combat Manager (but for admins)</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <link href="default-styles.css" type="text/css" rel="stylesheet" />
-<script src=""></script>
+<script>
+  let allMons;
+  
+  const handleResponse = (e) => {
+    const obj = JSON.parse(e.target.response); //parse string back to object
+    const { code } = obj;
+    if (code === 404) {
+      statusBox.innerHTML = '<p>' + obj.msg + '</p>';
+	  return;
+    }
+	allMons = obj;
+    statusBox.innerHTML = '<p>Loaded successfully!</p>';
+	displayMonsters();
+  }
+  const downloadMonsters = (e) => {
+    const monURL = '/viewAll';
+    const xhr = new XMLHttpRequest();
+    xhr.onload = handleResponse;
+    xhr.open('GET', monURL);
+    xhr.setRequestHeader('Accept', 'application/javascript');
+    xhr.send();
+	statusBox.innerHTML = '<p><img src="/loading.gif"></p><p>Loading... This may take a few minutes!</p>';
+  }
+  const displayMonsters = () => {
+    infoHere.innerHTML = '';
+    for (let monster of allMons) {
+	  infoHere.innerHTML += '<div class="monster"><p>' + monster.name + ' - <b>Type:</b> ' + monster.type + ' - <b>AC:</b> ' + monster.armor_class + ' - <b> HP:</b> ' + monster.hit_points + '</p></div>';
+	}
+  }
+  
+  window.onload = () => {
+    downloadMonsters();
+  }
+  
+</script>
 <body>
-<h1>This page has nothing so far. It will be a functioning admin page when I am done.</h1>
+<h1>All Data</h1>
+<div id='statusBox' class='centered'> </div>
+<div id='infoHere'> </div>
+<footer>
+	  <p> &#169; Ava Feldman 2021 </p>
+	</footer>
 </body>
 </html> 

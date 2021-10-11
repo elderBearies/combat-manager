@@ -2,32 +2,17 @@
   <head>
     <title>5e Combat Manager</title>
     <link href="default-styles.css" type="text/css" rel="stylesheet" />
-    <style>
-      header{
-        background-color:pink;
-        color: yellow;
-        font-size:2em;
-        padding:1em;
-      }
-      
-      h1{
-        font-family: fantasy;
-        filter: drop-shadow(5px 5px 2px #4444dd);
-      }
-    </style>
     <script>
 	  let initiative = [];
 	  
 	  const displayInitiative = () => {
 	    monsterBox.innerHTML = '';
 	    for (let monster of initiative) {
-			monsterBox.innerHTML += '<p>' + monster.name + ' - <b>AC:</b> ' + monster.armor_class + ' <b> - HP:</b> <input class="chp" type="number" value="' + monster.chit_points + '">/' + monster.hit_points + '</p>';
+			monsterBox.innerHTML += '<div class="init"><p>' + monster.name + ' - <b>AC:</b> ' + monster.armor_class + ' <b> - HP:</b> <input class="chp" type="number" value="' + monster.chit_points + '">/' + monster.hit_points + '</p></div>';
 		}
 	  }
 	
       const handleResponse = (e) => {
-        console.log('e.target = ', e.target); // e.target is the xhr object
-        console.log('e.target.response = ', e.target.response); //this is a string of json
         const obj = JSON.parse(e.target.response); //parse string back to object
         //update jokecontainer with contents of joke
 		const { code } = obj;
@@ -46,11 +31,8 @@
         const xhr = new XMLHttpRequest();
         xhr.onload = handleResponse;
 		const query = document.querySelector('#monSearch').value.replace(/ /g, '-').toLowerCase();
-		console.log(query);
         xhr.open('GET', `${monURL}${query}`);
-        // with xhr, after we open a connection but before we send(), we can set 1 or more http request headers
-        // not strictly necessary here - /random-joke sends json by default
-        xhr.setRequestHeader('Accept', 'application/javascript');
+        xhr.setRequestHeader('Accept', 'application/JSON');
         xhr.send();
       }
       
@@ -93,7 +75,7 @@
     <header>
       <h1>5e Combat Manager</h1>
     </header>
-    
+    <div class='centered'>
     <section>
       <h2>Wanna fight some monsters?</h2>
       <p><input id='monSearch' type='text' placeholder='Add a monster...'><button id="btnMonster">Roll for initiative!</button></p>
@@ -111,9 +93,14 @@
       <p><a href='/addMonster'><button>Add your own!</button></a></p>
     </section>
 	
+	
+	
 	<section>
 	  <p>For the endpoints and such, head over <a href='/links'>here</a>!</p>
 	</section>
-    
+	</div>
+    <footer>
+	  <p> &#169; Ava Feldman 2021 </p>
+	</footer>
   </body>
 </html>

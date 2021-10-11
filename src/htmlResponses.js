@@ -15,6 +15,9 @@ const defaultStyles = fs.readFileSync(`${__dirname}/../client/default-styles.css
 const indexPage = fs.readFileSync(`${__dirname}/../client/client.html`);
 const monsterPage = fs.readFileSync(`${__dirname}/../client/addMonster.html`);
 const allLinks = fs.readFileSync(`${__dirname}/../client/allLinks.html`);
+const adminPage = fs.readFileSync(`${__dirname}/../client/admin.html`);
+const loader = `${__dirname}/../client/loading.gif`;
+// loading gif from acegif.com
 
 const get404Response = (request, response, httpMethod) => {
   utils.sendResponse(response, 404, 'text/html', errorPage, httpMethod);
@@ -36,10 +39,20 @@ const getAllLinks = (request, response, httpMethod) => {
   utils.sendResponse(response, 200, 'text/html', allLinks, httpMethod);
 };
 
+const getAdminPage = (request, response, httpMethod) => {
+  utils.sendResponse(response, 200, 'text/html', adminPage, httpMethod);
+};
+
+const getLoader = (request, response) => {
+  utils.loadFile(request, response, loader, 'image/gif');
+};
+
 export {
   get404Response,
   getCSSResponse,
   getIndexResponse,
   getMonsterPage,
   getAllLinks,
+  getAdminPage,
+  getLoader,
 };

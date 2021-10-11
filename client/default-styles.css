@@ -1,7 +1,56 @@
 * {
-  font-family: sans-serif;	
+  font-family: sans-serif;
+  box-sizing: border-box;  
+}
+
+h1 {
+  font-style: italic;
+  text-align: center;
+  margin: 10px;
 }
       
 section {
   border-bottom:1px dashed gray;
+}
+
+body {
+  background-color: #5ca59c;
+}
+
+.centered {
+  text-align: center;
+}
+
+.init {
+  background-color: white;
+  width: 25%;
+  margin-left: 37.5%;
+  margin-right: 37.5%;
+  border-radius: 10px;
+  padding: 5px;
+}
+
+.chp {
+  width: 50px;
+}
+
+img {
+  height: 50px;
+  margin: 10px;
+}	
+
+.monster {
+  text-align: center;
+  padding: 5px;
+  background-color: white;
+  border-radius: 10px;
+  margin: 10px 25px;
+}
+
+#infoHere {
+  margin-top: 20px;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 33% 33% 33%;
+  grid-column-gap: 0.5%;
 }

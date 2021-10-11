@@ -25,6 +25,21 @@ const respondJSONMeta = (request, response, status) => {
   response.end();
 };
 
+const allMonsters = async (request, response, params, acceptedTypes, httpMethod) => {
+  const externalMons = await getMonsters();
+  const monSON = [].concat(monsters);
+
+  // i couldn't get this to work without the await inside of the loop
+  // changed eslint settings so it would stop yelling at me
+  for (let i = 0; i < externalMons.length; i++) {
+    monSON.push(await getMonsters(externalMons[i].index));
+  }
+
+  const data = utils.handleType(acceptedTypes, monSON);
+
+  utils.sendResponse(response, 200, data[0], data[1], httpMethod);
+};
+
 const searchMons = async (request, response, params, acceptedTypes, httpMethod) => {
   const externalMons = await getMonsters();
   const { term } = params;
@@ -32,13 +47,12 @@ const searchMons = async (request, response, params, acceptedTypes, httpMethod) 
     code: 404,
     msg: "Couldn't find that monster!",
   };
+  let data;
+
   if (!term || term.length <= 0) {
     utils.sendResponse(response, 404, 'application/JSON', JSON.stringify(failedToFind), httpMethod);
     return;
   }
-  /** if (term.length <= 0) {
-    utils.sendResponse(response, 404, 'application/JSON', JSON.stringify(failedToFind), httpMethod);
-  } */
   let monStr;
   let foundMon = '';
   for (let i = 0; i < externalMons.length; i += 1) {
@@ -48,15 +62,15 @@ const searchMons = async (request, response, params, acceptedTypes, httpMethod) 
     }
   }
   if (foundMon.length > 0) {
-    monStr = JSON.stringify(await getMonsters(foundMon));
-    utils.sendResponse(response, 200, 'application/JSON', monStr, httpMethod);
+    data = utils.handleType(acceptedTypes, await getMonsters(foundMon));
+    utils.sendResponse(response, 200, data[0], data[1], httpMethod);
     return;
   }
 
   for (let i = 0; i < monsters.length; i += 1) {
     if (monsters[i].index.includes(term)) {
-      monStr = JSON.stringify(monsters[i]);
-      utils.sendResponse(response, 200, 'application/JSON', monStr, httpMethod);
+      data = utils.handleType(acceptedTypes, monsters[i]);
+      utils.sendResponse(response, 200, data[0], data[1], httpMethod);
       return;
     }
   }
@@ -80,21 +94,9 @@ const getCustomMonsters = (request, response, params, acceptedTypes, httpMethod)
   // grab jokes as determined by limit
   const monSON = utils.getRandomArrItems(monsters, limit);
 
-  // empty variables for storing data
-  // let monStr;
-  const type = 'application/JSON';
+  const data = utils.handleType(acceptedTypes, monSON);
 
-  /** if (acceptedTypes.includes('text/xml')) {
-    type = 'text/xml';
-    //TODO
-  } else {
-    type = 'application/JSON';
-    monStr = monSON.length > 1 ? JSON.stringify(monSON) : JSON.stringify(monSON[0]);
-  } */
-
-  // defined as const for now bc eslint was yelling at me
-  const monStr = JSON.stringify(monSON);
-  utils.sendResponse(response, 200, type, monStr, httpMethod);
+  utils.sendResponse(response, 200, data[0], data[1], httpMethod);
 };
 
 // pulled from body.parse example, modified to suit my needs
@@ -163,4 +165,5 @@ export {
   getCustomMonsters,
   addMonster,
   searchMons,
+  allMonsters,
 };

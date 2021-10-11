@@ -10,8 +10,9 @@
 <section>
   <h2>Endpoints</h2>
   <h3>GET:</h3> 
-  <p> <a href='/customMonsters'>/customMonsters</a>: takes a limit parameter and returns a random selection of all of the monsters users have added. Defaults to 1 if no limit is given.</p>
-  <p> <a href='/searchMonsters'>/searchMonsters</a>: takes a term parameter and searches both the external api and the local api for the first monster that fits it. </p>
+  <p> <a href='/customMonsters'>/customMonsters</a>: Takes a limit parameter and returns a random selection of all of the monsters users have added. Defaults to 1 if no limit is given.</p>
+  <p> <a href='/searchMonsters'>/searchMonsters</a>: Takes a term parameter and searches both the external api and the local api for the first monster that fits it. </p>
+  <p> <a href='/viewAll'>/viewAll</a>: Doesn't take any parameters, just displays all of the monsters in both the external and local api. Due to how the external api works, it takes a little while to load.
   <h3>POST:</h3>
   <p> <a href='/addMonster'>/addMonster</a>: Allows users to add monsters to the local api via a simple form.</p>
 </section>
@@ -21,7 +22,10 @@
 </section>
 <section>
   <h2>Admins</h2>
-  <p> Go here for the admin page, where you can edit the contents of the local api! </p>
+  <p> Go <a href='/admin'>here</a> for the admin page, where you can view all of the data the app has access to! </p>
 </section>
+<footer>
+	  <p> &#169; Ava Feldman 2021 </p>
+	</footer>
 </body>
 </html> 

@@ -8,7 +8,8 @@
     "test": "echo \"Tests complete!\"",
     "pretest": "eslint ./src --fix",
     "start": "node ./src/server.js",
-    "nodemon": "nodemon ./src/server.js -e js,html,css"
+    "nodemon": "nodemon ./src/server.js -e js,html,css",
+	"chromeinspect": "node --inspect ./src/index.js & echo \"Now in DEBUG mode. Head to 'chrome://inspect'\""
   },
   "keywords": [],
   "author": "",

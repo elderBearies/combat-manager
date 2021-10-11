@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Our simple HTTP server</title>
+  <title>Add a Monster - 5e Combat Manager</title>
   <link rel="stylesheet" type="text/css" href="/default-styles.css">
   <script>
   	"use strict"; // because I got rid of client-side babel
@@ -11,7 +11,7 @@
       	//console.dir(obj);
       	
       	if(obj.message){
-      		content.innerHTML += `<p>${obj.message}</p>`;
+      		content.innerHTML += '<p>' + obj.message + '</p>';
       	}
       }
     };
@@ -83,8 +83,8 @@
   </script>
 </head>
 <body>
-  <section id="top">
-    <h3>Add a monster!</h3>
+  <section id="top" class='centered'>
+    <h1>Add a monster!</h1>
     <form id="nameForm" action="/addMonster" method="post">
       <label for="name">Name: </label>
       <input id="nameField" type="text" name="name" />
@@ -96,9 +96,12 @@
 	  <input id="hpField" type="text" name="hit_points"/>
       <input type="submit" value="Add Monster" />
     </form>
-    <p>Go to <a href="/customMonsters?limit=999">/customMonsters</a> to see all of the custom monsters added!</p>
+    <p>Go to <a href="/customMonsters?limit=999">/customMonsters</a> to see all of the custom monsters added, or go back to the <a href='/'>app</a> to add them to initiative!</p>
   </section>
   <section id="content">
   </section>
+  <footer>
+    <p> &#169; Ava Feldman 2021 </p>
+  </footer>
 </body>
 </html>
