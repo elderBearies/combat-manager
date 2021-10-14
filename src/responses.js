@@ -108,7 +108,7 @@ const getCustomMonsters = (request, response, params, acceptedTypes, httpMethod)
 
   const data = utils.handleType(acceptedTypes, monSON);
 
-  utils.sendResponse(response, 200, data[0], data[1], httpMethod);
+  utils.sendResponse(response, 200, data.type, data.str, httpMethod);
 };
 
 // pulled from body.parse example, modified to suit my needs
