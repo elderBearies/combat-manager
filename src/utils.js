@@ -37,8 +37,11 @@ const parseURL = (urlStr) => {
 
 // source: https://stackoverflow.com/questions/2219526/how-many-bytes-in-a-javascript-string/29955838
 // refactored to arrow function by ACJ
-const getBinarySize = (string) => Buffer.byteLength(string, 'utf8');
-
+// added an if statement to catch invalid data
+const getBinarySize = (string) => 
+    if (!string) return 'Something went wrong.';
+    return Buffer.byteLength(string, 'utf8');
+}
 // I got tired of writing this stuff out, so I made it a function.
 const sendResponse = (response, code, type, data, httpMethod) => {
   const headers = {
